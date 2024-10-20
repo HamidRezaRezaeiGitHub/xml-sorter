@@ -3,12 +3,13 @@ package dev.hrrezaei.xml.sorter.service;
 import dev.hrrezaei.xml.sorter.exception.XmlSortingException;
 import org.w3c.dom.Document;
 
-import java.io.File;
-import java.io.InputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
 
 /**
  * Interface for sorting XML content to ensure consistent ordering of elements and attributes.
- * This facilitates effective comparison of XML files.
+ * This facilitates effective comparison of XML files by standard text editors.
  */
 public interface XmlSorter {
 
@@ -22,7 +23,14 @@ public interface XmlSorter {
      * @return the sorted XML content as a {@code String}
      * @throws XmlSortingException if an error occurs during parsing or sorting
      */
-    String sort(String xmlContent) throws XmlSortingException;
+    default String sort(String xmlContent) throws XmlSortingException {
+        try {
+            Document document = parseXmlContent(xmlContent);
+            return sort(document);
+        } catch (Exception e) {
+            throw new XmlSortingException("Error sorting XML content from String", e);
+        }
+    }
 
     /**
      * Sorts the XML content read from the given {@code InputStream}.
@@ -34,7 +42,14 @@ public interface XmlSorter {
      * @return the sorted XML content as a {@code String}
      * @throws XmlSortingException if an error occurs during reading, parsing, or sorting
      */
-    String sort(InputStream inputStream) throws XmlSortingException;
+    default String sort(InputStream inputStream) throws XmlSortingException {
+        try {
+            String xmlContent = readInputStream(inputStream);
+            return sort(xmlContent);
+        } catch (Exception e) {
+            throw new XmlSortingException("Error sorting XML content from InputStream", e);
+        }
+    }
 
     /**
      * Sorts the XML content from the specified {@code File}.
@@ -46,7 +61,13 @@ public interface XmlSorter {
      * @return the sorted XML content as a {@code String}
      * @throws XmlSortingException if an error occurs during file access, parsing, or sorting
      */
-    String sort(File file) throws XmlSortingException;
+    default String sort(File file) throws XmlSortingException {
+        try (InputStream inputStream = new FileInputStream(file)) {
+            return sort(inputStream);
+        } catch (Exception e) {
+            throw new XmlSortingException("Error sorting XML content from File", e);
+        }
+    }
 
     /**
      * Sorts the given XML {@code Document} object.
@@ -60,4 +81,40 @@ public interface XmlSorter {
      */
     String sort(Document document) throws XmlSortingException;
 
+    /**
+     * Parses the XML content from a {@code String} into a {@code Document} object.
+     *
+     * @param xmlContent the XML content as a {@code String}
+     * @return the parsed XML as a {@code Document}
+     * @throws Exception if an error occurs during parsing
+     */
+    private Document parseXmlContent(String xmlContent) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        // Disable external entities for security
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        try (InputStream inputStream = new ByteArrayInputStream(xmlContent.getBytes())) {
+            return builder.parse(inputStream);
+        }
+    }
+
+    /**
+     * Reads the content from an {@code InputStream} into a {@code String}.
+     *
+     * @param inputStream the {@code InputStream} to read from
+     * @return the content as a {@code String}
+     * @throws IOException if an error occurs during reading
+     */
+    private String readInputStream(InputStream inputStream) throws IOException {
+        try (Reader reader = new InputStreamReader(inputStream)) {
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[8192];
+            int length;
+            while ((length = reader.read(buffer, 0, buffer.length)) != -1) {
+                sb.append(buffer, 0, length);
+            }
+            return sb.toString();
+        }
+    }
 }
