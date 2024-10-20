@@ -14,21 +14,20 @@ import java.io.*;
 public interface XmlSorter {
 
     /**
-     * Sorts the given XML content represented as a {@code String}.
+     * Sorts the XML content from the specified {@code File}.
      * <p>
-     * This method parses the XML content, sorts the elements and attributes,
+     * This method reads the XML content from the file, sorts the elements and attributes,
      * and returns the sorted XML as a {@code String}.
      *
-     * @param xmlContent the XML content to be sorted
+     * @param file the {@code File} containing the XML content to be sorted
      * @return the sorted XML content as a {@code String}
-     * @throws XmlSortingException if an error occurs during parsing or sorting
+     * @throws XmlSortingException if an error occurs during file access, parsing, or sorting
      */
-    default String sort(String xmlContent) throws XmlSortingException {
-        try {
-            Document document = parseXmlContent(xmlContent);
-            return sort(document);
+    default String sort(File file) throws XmlSortingException {
+        try (InputStream inputStream = new FileInputStream(file)) {
+            return sort(inputStream);
         } catch (Exception e) {
-            throw new XmlSortingException("Error sorting XML content from String", e);
+            throw new XmlSortingException("Error sorting XML content from File", e);
         }
     }
 
@@ -52,20 +51,21 @@ public interface XmlSorter {
     }
 
     /**
-     * Sorts the XML content from the specified {@code File}.
+     * Sorts the given XML content represented as a {@code String}.
      * <p>
-     * This method reads the XML content from the file, sorts the elements and attributes,
+     * This method parses the XML content, sorts the elements and attributes,
      * and returns the sorted XML as a {@code String}.
      *
-     * @param file the {@code File} containing the XML content to be sorted
+     * @param xmlContent the XML content to be sorted
      * @return the sorted XML content as a {@code String}
-     * @throws XmlSortingException if an error occurs during file access, parsing, or sorting
+     * @throws XmlSortingException if an error occurs during parsing or sorting
      */
-    default String sort(File file) throws XmlSortingException {
-        try (InputStream inputStream = new FileInputStream(file)) {
-            return sort(inputStream);
+    default String sort(String xmlContent) throws XmlSortingException {
+        try {
+            Document document = parseXmlContent(xmlContent);
+            return sort(document);
         } catch (Exception e) {
-            throw new XmlSortingException("Error sorting XML content from File", e);
+            throw new XmlSortingException("Error sorting XML content from String", e);
         }
     }
 
@@ -88,7 +88,7 @@ public interface XmlSorter {
      * @return the parsed XML as a {@code Document}
      * @throws Exception if an error occurs during parsing
      */
-    private Document parseXmlContent(String xmlContent) throws Exception {
+    default Document parseXmlContent(String xmlContent) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         // Disable external entities for security

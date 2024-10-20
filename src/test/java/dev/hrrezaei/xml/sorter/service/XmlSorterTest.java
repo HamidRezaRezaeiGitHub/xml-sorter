@@ -1,6 +1,7 @@
 package dev.hrrezaei.xml.sorter.service;
 
 import dev.hrrezaei.xml.sorter.exception.XmlSortingException;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,9 +14,7 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Test class for XmlSorter implementations.
- */
+@Log4j2
 @SpringBootTest
 public class XmlSorterTest {
 
@@ -36,6 +35,7 @@ public class XmlSorterTest {
 
         // Perform the sorting
         String sortedXml = xmlSorter.sort(inputResource.getFile());
+        log.info("Sorting the file [{}] has resulted in \n{}", inputFileLocation, sortedXml);
 
         // Normalize whitespace for comparison
         String normalizedExpectedXml = expectedXml.replaceAll("\\s+", "");
@@ -43,6 +43,11 @@ public class XmlSorterTest {
 
         // Assert that the sorted XML matches the expected output
         assertEquals(normalizedExpectedXml, normalizedSortedXml, "The sorted XML does not match the expected output.");
+
+        if (!inputFileLocation.equals(expectedFileLocation)) {
+            // The expected file should match itself, too.
+            testFile(expectedFileLocation, expectedFileLocation);
+        }
     }
 
     @Test
@@ -106,48 +111,5 @@ public class XmlSorterTest {
     @Test
     public void testProcessingInstructionsPreservation() throws Exception {
         testFile("classpath:xml/processingInstructionsPreservation-input.xml", "classpath:xml/processingInstructionsPreservation-output.xml");
-    }
-
-    /**
-     * Repeating the other test scenarios should lead to the same results.
-     * The output file should be resulted in themselves.
-     */
-    @Test
-    public void testDeterministicOutput() throws Exception {
-        testSiblingNodeOrdering();
-        testFile("classpath:xml/siblingNodeOrdering-output.xml", "classpath:xml/siblingNodeOrdering-output.xml");
-
-        testAttributeOrdering();
-        testFile("classpath:xml/attributeOrdering-output.xml", "classpath:xml/attributeOrdering-output.xml");
-
-        testNodeComparisonByAttributeNames();
-        testFile("classpath:xml/nodeComparisonByAttributeNames-output.xml", "classpath:xml/nodeComparisonByAttributeNames-output.xml");
-
-        testNodeComparisonByAttributeValues();
-        testFile("classpath:xml/nodeComparisonByAttributeValues-output.xml", "classpath:xml/nodeComparisonByAttributeValues-output.xml");
-
-        testNodeComparisonByTextContent();
-        testFile("classpath:xml/nodeComparisonByTextContent-output.xml", "classpath:xml/nodeComparisonByTextContent-output.xml");
-
-        testCommentPreservation();
-        testFile("classpath:xml/commentPreservation-output.xml", "classpath:xml/commentPreservation-output.xml");
-
-        testNamespaceHandling();
-        testFile("classpath:xml/namespaceHandling-output.xml", "classpath:xml/namespaceHandling-output.xml");
-
-        testEntityAndWhitespacePreservation();
-        testFile("classpath:xml/entityAndWhitespacePreservation-output.xml", "classpath:xml/entityAndWhitespacePreservation-output.xml");
-
-        testInvalidXmlHandling();
-
-        testOutputFormatting();
-        testFile("classpath:xml/outputFormatting-output.xml", "classpath:xml/outputFormatting-output.xml");
-
-        testCDataPreservation();
-        testFile("classpath:xml/cdataPreservation-output.xml", "classpath:xml/cdataPreservation-output.xml");
-
-        testProcessingInstructionsPreservation();
-        testFile("classpath:xml/processingInstructionsPreservation-output.xml", "classpath:xml/processingInstructionsPreservation-output.xml");
-
     }
 }

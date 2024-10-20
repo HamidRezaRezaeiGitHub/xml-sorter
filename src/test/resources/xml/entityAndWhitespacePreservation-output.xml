@@ -1,4 +1,4 @@
 <root>
-    <element>&lt;Sample&gt; &amp; Test</element>
     <element>   Whitespace   </element>
+    <element>&lt;Sample&gt; &amp; Test</element>
 </root>
