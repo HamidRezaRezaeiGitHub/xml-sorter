@@ -1,0 +1,8 @@
+<root>
+    <!-- Comment before beta -->
+    <beta>Second</beta>
+    <!-- Comment before alpha -->
+    <alpha>First</alpha>
+    <!-- Comment before gamma -->
+    <gamma>Third</gamma>
+</root>

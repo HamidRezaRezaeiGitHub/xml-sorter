@@ -1,0 +1,4 @@
+<root>
+    <element><![CDATA[Some <CDATA> content]]></element>
+    <element><![CDATA[Another CDATA content]]></element>
+</root>

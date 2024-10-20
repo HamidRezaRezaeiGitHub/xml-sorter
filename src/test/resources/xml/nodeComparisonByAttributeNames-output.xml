@@ -1,0 +1,6 @@
+<!-- nodeComparisonByAttributeNames-output.xml -->
+<root>
+    <item aAttr="1">First</item>
+    <item bAttr="2">Second</item>
+    <item cAttr="3">Third</item>
+</root>
