@@ -13,6 +13,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static dev.hrrezaei.xml.sorter.service.NodeConvertor.convertAttributesToList;
 import static dev.hrrezaei.xml.sorter.service.NodeConvertor.convertNodeToExpandedString;
@@ -117,11 +119,16 @@ public class XmlSorterImpl implements XmlSorter {
             transformer.transform(new DOMSource(document), new StreamResult(writer));
 
             String sortedXml = writer.toString();
-            if (isBlank(xmlDeclaration.get())) {
-                return sortedXml;
-            } else {
-                return xmlDeclaration.get() + "\n" + sortedXml;
+            StringBuilder finalXml = new StringBuilder();
+
+            // Handle the XML declaration
+            if (!isBlank(xmlDeclaration.get())) {
+                finalXml.append(xmlDeclaration.get()).append("\n");
             }
+
+            sortedXml = ensureRootOnNewLine(sortedXml, root);
+            finalXml.append(sortedXml);
+            return finalXml.toString();
 
         } catch (TransformerException e) {
             throw new XmlSortingException("Error transforming sorted XML document to String", e);
@@ -239,5 +246,26 @@ public class XmlSorterImpl implements XmlSorter {
         log.debug("Element keys contain the target element: {}", elementsAfterNonElements.containsKey(node));
 
         return elementsAfterNonElements.getOrDefault(node, Collections.emptyList());
+    }
+
+    private String ensureRootOnNewLine(String sortedXml, Node root) {
+        // Check if there's a newline before the root element
+        String rootElementName = root.getNodeName();
+        String patternString = "(<\\?.*\\?>)(\\s*)(<" + Pattern.quote(rootElementName) + ")";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(sortedXml.trim());
+
+        if (matcher.find()) {
+            String preRootTags = matcher.group(1);
+            String whitespace = matcher.group(2);
+            String rootElementStart = matcher.group(3);
+
+            if (!whitespace.contains("\n")) {
+                // Insert a newline between the processing instruction and the root element
+                sortedXml = sortedXml.replace(preRootTags + whitespace + rootElementStart,
+                        preRootTags + "\n" + rootElementStart);
+            }
+        }
+        return sortedXml.trim();
     }
 }

@@ -37,12 +37,8 @@ public class XmlSorterTest {
         String sortedXml = xmlSorter.sort(inputResource.getFile());
         log.info("Sorting the file [{}] has resulted in \n{}", inputFileLocation, sortedXml);
 
-        // Normalize whitespace for comparison
-        String normalizedExpectedXml = expectedXml.replaceAll("\\s+", "");
-        String normalizedSortedXml = sortedXml.replaceAll("\\s+", "");
-
         // Assert that the sorted XML matches the expected output
-        assertEquals(normalizedExpectedXml, normalizedSortedXml, "The sorted XML does not match the expected output.");
+        assertEquals(expectedXml.trim(), sortedXml.trim(), "The sorted XML does not match the expected output.");
 
         if (!inputFileLocation.equals(expectedFileLocation)) {
             // The expected file should match itself, too.
