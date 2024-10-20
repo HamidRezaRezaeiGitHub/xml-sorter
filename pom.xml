@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Parent POM for Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <!-- Project Coordinates -->
+    <groupId>dev.hrrezaei.xml</groupId>
+    <artifactId>sorter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>XML Sorter</name>
+    <description>A Spring Boot application to sort XML files for effective comparison.</description>
+    <url>https://github.com/HamidRezaRezaeiGitHub/xml-sorter</url>
+
+    <!-- Licensing Information -->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!-- Developer Information -->
+    <developers>
+        <developer>
+            <id>HamidRezaRezaeiGitHub</id>
+            <name>Hamid R. Rezaei</name>
+            <email>hamidreza74hrr@yahoo.com</email>
+            <url>https://github.com/HamidRezaRezaeiGitHub</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- Source Control Management -->
+    <scm>
+        <connection>scm:git:git://github.com/HamidRezaRezaeiGitHub/xml-sorter.git</connection>
+        <developerConnection>scm:git:ssh://github.com/HamidRezaRezaeiGitHub/xml-sorter.git</developerConnection>
+        <url>https://github.com/HamidRezaRezaeiGitHub/xml-sorter</url>
+    </scm>
+
+    <!-- Project Properties -->
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
+    <!-- Project Dependencies -->
+    <dependencies>
+        <!-- Spring Boot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Web Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Lombok for Boilerplate Code Reduction -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Spring Boot Testing Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JAXB API for XML Manipulation -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
+        <!-- Additional Dependencies for XML Processing -->
+        <!-- Uncomment if needed -->
+        <!--
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        -->
+    </dependencies>
+
+    <!-- Build Configuration -->
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
