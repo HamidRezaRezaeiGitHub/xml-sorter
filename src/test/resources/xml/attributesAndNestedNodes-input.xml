@@ -1,0 +1,9 @@
+<root>
+    <elementA attr2="value2" attr="value">
+        <childB attr="2">Text B</childB>
+        <childA attr="1">Text A</childA>
+    </elementA>
+    <elementA attr="value">
+        <childC>Text C</childC>
+    </elementA>
+</root>

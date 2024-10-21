@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,22 +26,34 @@ public class XmlSorterTest {
     private void testFile(String inputFileLocation, String expectedFileLocation) throws Exception {
         // Load the input XML file
         Resource inputResource = resourceLoader.getResource(inputFileLocation);
-        String inputXml = Files.readString(inputResource.getFile().toPath(), StandardCharsets.UTF_8);
 
         // Load the expected output XML file
         Resource expectedResource = resourceLoader.getResource(expectedFileLocation);
-        String expectedXml = Files.readString(expectedResource.getFile().toPath(), StandardCharsets.UTF_8);
+        String expectedXml = readInputStream(new FileInputStream(expectedResource.getFile()));
 
         // Perform the sorting
         String sortedXml = xmlSorter.sort(inputResource.getFile());
         log.info("Sorting the file [{}] has resulted in \n{}", inputFileLocation, sortedXml);
 
         // Assert that the sorted XML matches the expected output
-        assertEquals(expectedXml.trim(), sortedXml.trim(), "The sorted XML does not match the expected output.");
+        assertEquals(expectedXml.trim(), sortedXml.trim(), "The sorted XML does not match the expected output from " +
+                                                           expectedFileLocation);
 
         if (!inputFileLocation.equals(expectedFileLocation)) {
             // The expected file should match itself, too.
             testFile(expectedFileLocation, expectedFileLocation);
+        }
+    }
+
+    private String readInputStream(InputStream inputStream) throws IOException {
+        try (Reader reader = new InputStreamReader(inputStream)) {
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[8192];
+            int length;
+            while ((length = reader.read(buffer, 0, buffer.length)) != -1) {
+                sb.append(buffer, 0, length);
+            }
+            return sb.toString();
         }
     }
 
@@ -107,5 +118,60 @@ public class XmlSorterTest {
     @Test
     public void testProcessingInstructionsPreservation() throws Exception {
         testFile("classpath:xml/processingInstructionsPreservation-input.xml", "classpath:xml/processingInstructionsPreservation-output.xml");
+    }
+
+    @Test
+    void testMultiLevelNesting() throws Exception {
+        testFile("classpath:xml/multiLevelNesting-input.xml", "classpath:xml/multiLevelNesting-output.xml");
+    }
+
+    @Test
+    void testAttributesAndNestedNodes() throws Exception {
+        testFile("classpath:xml/attributesAndNestedNodes-input.xml", "classpath:xml/attributesAndNestedNodes-output.xml");
+    }
+
+    @Test
+    void testNonElementNodes() throws Exception {
+        testFile("classpath:xml/nonElementNodes-input.xml", "classpath:xml/nonElementNodes-output.xml");
+    }
+
+    @Test
+    void testWhitespaceHandling() throws Exception {
+        testFile("classpath:xml/whitespaceHandling-input.xml", "classpath:xml/whitespaceHandling-output.xml");
+    }
+
+    @Test
+    void testNamespaces() throws Exception {
+        testFile("classpath:xml/namespaces-input.xml", "classpath:xml/namespaces-output.xml");
+    }
+
+    @Test
+    void testCDataSections() throws Exception {
+        testFile("classpath:xml/cdataSections-input.xml", "classpath:xml/cdataSections-output.xml");
+    }
+
+    @Test
+    void testMixedContent() throws Exception {
+        testFile("classpath:xml/mixedContent-input.xml", "classpath:xml/mixedContent-output.xml");
+    }
+
+    @Test
+    void testCommentsAndProcessingInstructions() throws Exception {
+        testFile("classpath:xml/commentsAndPI-input.xml", "classpath:xml/commentsAndPI-output.xml");
+    }
+
+    @Test
+    void testAttributesOnlyElements() throws Exception {
+        testFile("classpath:xml/attributesOnlyElements-input.xml", "classpath:xml/attributesOnlyElements-output.xml");
+    }
+
+    @Test
+    void testEmptyElements() throws Exception {
+        testFile("classpath:xml/emptyElements-input.xml", "classpath:xml/emptyElements-output.xml");
+    }
+
+    @Test
+    void testDifferentEncodings() throws Exception {
+        testFile("classpath:xml/differentEncodings-input.xml", "classpath:xml/differentEncodings-output.xml");
     }
 }

@@ -1,0 +1,16 @@
+<root>
+    <!-- Root level comment -->
+    <b>
+        <c>
+            <?processing instruction?>
+            <e>Value E</e>
+            <!-- Nested comment 2-->
+            <!-- Nested comment 1-->
+            <d>Value D</d>
+        </c>
+        <a>Value A</a>
+    </b>
+    <a>
+        <c>Value C</c>
+    </a>
+</root>

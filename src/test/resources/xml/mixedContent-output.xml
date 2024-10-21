@@ -1,0 +1,7 @@
+<root>
+    Some text between elements.
+    <a>Element A</a>
+    This is some text before elements.
+    <b>Element B</b>
+    Text after elements.
+</root>

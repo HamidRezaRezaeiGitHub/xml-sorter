@@ -1,0 +1,10 @@
+<root>
+    <script>
+        <![CDATA[
+        function sayHello() {
+            alert("Hello, World!");
+        }
+        ]]>
+    </script>
+    <message><![CDATA[This is a <test> message]]></message>
+</root>

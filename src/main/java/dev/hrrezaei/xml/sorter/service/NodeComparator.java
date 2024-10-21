@@ -1,5 +1,6 @@
 package dev.hrrezaei.xml.sorter.service;
 
+import dev.hrrezaei.xml.sorter.exception.XmlSortingException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -46,8 +47,7 @@ public class NodeComparator implements Comparator<Node> {
             return textComparison;
         }
 
-        // Nodes are considered equal
-        return 0;
+        throw new RuntimeException("Insufficient comparison logic!");
     }
 
     private List<String> getSortedAttributeNames(NamedNodeMap attrs) {
@@ -97,9 +97,7 @@ public class NodeComparator implements Comparator<Node> {
         List<Node> childNodes = new ArrayList<>();
         Node child = node.getFirstChild();
         while (child != null) {
-            if (child.getNodeType() == Node.TEXT_NODE || child.getNodeType() == Node.CDATA_SECTION_NODE) {
-                childNodes.add(child);
-            }
+            childNodes.add(child);
             child = child.getNextSibling();
         }
 
@@ -108,8 +106,8 @@ public class NodeComparator implements Comparator<Node> {
 
         // Process sorted child nodes
         for (Node sortedChild : childNodes) {
-            if (sortedChild.getNodeType() == Node.TEXT_NODE || sortedChild.getNodeType() == Node.CDATA_SECTION_NODE) {
-                textContent.append(sortedChild.getNodeValue());
+            if (sortedChild.getNodeValue() != null) {
+                textContent.append(sortedChild.getNodeValue().trim());
             }
         }
 

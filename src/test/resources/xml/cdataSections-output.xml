@@ -1,0 +1,6 @@
+<root>
+    <message><![CDATA[This is a <test> message]]></message>
+    <script><![CDATA[function sayHello() {
+            alert("Hello, World!");
+        }]]></script>
+</root>

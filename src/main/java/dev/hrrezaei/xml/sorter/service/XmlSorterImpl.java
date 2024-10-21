@@ -161,6 +161,9 @@ public class XmlSorterImpl implements XmlSorter {
                 }
 
                 if (child.getNodeType() != Node.ELEMENT_NODE) {
+                    if (child.getTextContent() != null) {
+                        child.setTextContent(child.getTextContent().trim());
+                    }
                     nonElementChildren.add(child);
                 } else {
                     childElements.add(child);

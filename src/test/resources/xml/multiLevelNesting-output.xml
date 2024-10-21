@@ -1,0 +1,17 @@
+<root>
+    <a>
+        <b>
+            <c>Value C</c>
+            <d>Value D</d>
+        </b>
+        <c>Value C</c>
+    </a>
+    <b>
+        <a>Value A</a>
+        <c>
+            <e>Value E</e>
+            <f>Value F</f>
+        </c>
+        <d>Value D</d>
+    </b>
+</root>

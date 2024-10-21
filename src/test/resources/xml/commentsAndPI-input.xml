@@ -1,0 +1,12 @@
+<root>
+    <!-- Root level comment -->
+    <?processing instruction 1?>
+    <b>
+        <!-- Comment inside b -->
+        <d>Value D</d>
+        <?processing instruction 2?>
+        <c>Value C</c>
+    </b>
+    <a>Value A</a>
+    <!-- Another root level comment -->
+</root>

@@ -1,0 +1,4 @@
+<root>
+    <elementB attr2="value2" attr1="value1" />
+    <elementA attr="value" />
+</root>

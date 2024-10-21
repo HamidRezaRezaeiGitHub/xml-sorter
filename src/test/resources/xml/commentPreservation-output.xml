@@ -1,8 +1,8 @@
 <root>
-    <!-- Comment before alpha -->
+    <!--Comment before alpha-->
     <alpha>First</alpha>
-    <!-- Comment before beta -->
+    <!--Comment before beta-->
     <beta>Second</beta>
-    <!-- Comment before gamma -->
+    <!--Comment before gamma-->
     <gamma>Third</gamma>
 </root>
