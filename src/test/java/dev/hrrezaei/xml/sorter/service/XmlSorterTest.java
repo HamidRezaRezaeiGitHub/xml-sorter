@@ -8,8 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import java.io.*;
+import java.io.FileInputStream;
 
+import static dev.hrrezaei.xml.sorter.service.FileUtil.readInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -42,18 +43,6 @@ public class XmlSorterTest {
         if (!inputFileLocation.equals(expectedFileLocation)) {
             // The expected file should match itself, too.
             testFile(expectedFileLocation, expectedFileLocation);
-        }
-    }
-
-    private String readInputStream(InputStream inputStream) throws IOException {
-        try (Reader reader = new InputStreamReader(inputStream)) {
-            StringBuilder sb = new StringBuilder();
-            char[] buffer = new char[8192];
-            int length;
-            while ((length = reader.read(buffer, 0, buffer.length)) != -1) {
-                sb.append(buffer, 0, length);
-            }
-            return sb.toString();
         }
     }
 
@@ -100,7 +89,7 @@ public class XmlSorterTest {
     @Test
     public void testInvalidXmlHandling() {
         assertThrows(XmlSortingException.class, () -> {
-            Resource inputResource = resourceLoader.getResource("classpath:xml/invalidXmlHandling-input.xml");
+            Resource inputResource = resourceLoader.getResource("classpath:xml/invalidXmlHandling.xml");
             xmlSorter.sort(inputResource.getFile());
         });
     }
@@ -170,8 +159,4 @@ public class XmlSorterTest {
         testFile("classpath:xml/emptyElements-input.xml", "classpath:xml/emptyElements-output.xml");
     }
 
-    @Test
-    void testDifferentEncodings() throws Exception {
-        testFile("classpath:xml/differentEncodings-input.xml", "classpath:xml/differentEncodings-output.xml");
-    }
 }

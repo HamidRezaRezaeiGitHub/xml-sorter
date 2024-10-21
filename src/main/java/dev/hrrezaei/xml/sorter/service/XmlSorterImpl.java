@@ -41,6 +41,7 @@ public class XmlSorterImpl implements XmlSorter {
      */
     @Override
     public String sort(String xmlContent) throws XmlSortingException {
+        log.debug("Received XML content: \n{}", xmlContent);
         try {
             String trimmedXmlContent = xmlContent.trim();
 
