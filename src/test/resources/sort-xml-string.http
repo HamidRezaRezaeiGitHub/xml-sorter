@@ -1,0 +1,48 @@
+### Sorting XML Content via POST Request
+
+POST http://localhost:8080/api/v1/sorter/xml
+Content-Type: application/xml
+
+<root>
+    <beta>Second</beta>
+    <alpha>First</alpha>
+    <gamma>Third</gamma>
+</root>
+
+### Sorting XML Content via POST Request with Variables
+
+POST http://{{host}}:{{port}}/api/v1/sorter/xml
+Content-Type: application/xml
+
+<root>
+    <beta>Second</beta>
+    <alpha>First</alpha>
+    <gamma>Third</gamma>
+</root>
+
+### Test Case 1: Simple XML
+
+POST http://{{host}}:{{port}}/api/v1/sorter/xml
+Content-Type: application/xml
+
+<root>
+    <b>Value B</b>
+    <a>Value A</a>
+    <c>Value C</c>
+</root>
+
+### Test Case 2: Nested XML
+
+POST http://{{host}}:{{port}}/api/v1/sorter/xml
+Content-Type: application/xml
+
+<root>
+    <b>
+        <d>Value D</d>
+        <c>Value C</c>
+        <a>Value A</a>
+    </b>
+    <a>
+        <c>Value C</c>
+    </a>
+</root>
